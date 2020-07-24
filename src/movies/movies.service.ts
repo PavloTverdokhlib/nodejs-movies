@@ -8,6 +8,7 @@ import {
   Status,
 } from '../shared/interfaces';
 import { predefinedMovies } from '../mocks';
+import { MovieDto } from '../models/movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -31,7 +32,7 @@ export class MoviesService {
     return movie;
   }
 
-  public createMovie(data: Movie): Movie {
+  public createMovie(data: MovieDto): Movie {
     const newMovie = new Movie({ id: uuidv4(), ...data });
     this.movies.push(newMovie);
     return newMovie;

@@ -16,6 +16,7 @@ import {
   Paginated,
 } from '../shared/interfaces';
 import { routes } from '../constants/routes';
+import { MovieDto } from '../models/movie.dto';
 
 @Controller(routes.movies)
 export class MoviesController {
@@ -32,7 +33,7 @@ export class MoviesController {
   }
 
   @Post()
-  createMovie(@Body() data: Movie): Movie {
+  createMovie(@Body() data: MovieDto): Movie {
     return this.moviesService.createMovie(data);
   }
 
