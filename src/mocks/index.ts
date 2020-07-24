@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Movie } from '../models/movie.model';
+import { Genre, Movie } from '../models/movie.model';
 
 export const predefinedMovies: Movie[] = [
   {
@@ -8,7 +8,7 @@ export const predefinedMovies: Movie[] = [
     description: 'Save the galaxy',
     release: new Date(),
     director: 'John Lucas',
-    genre: 'Adventure',
+    genre: Genre.Adventure,
   },
   {
     id: uuidv4(),
@@ -16,7 +16,7 @@ export const predefinedMovies: Movie[] = [
     description: 'Dinosour',
     release: new Date(),
     director: 'Bill Gate',
-    genre: 'Action',
+    genre: Genre.Action,
   },
   {
     id: uuidv4(),
@@ -24,7 +24,7 @@ export const predefinedMovies: Movie[] = [
     description: 'Agent 007',
     release: new Date(),
     director: 'Shan Conory',
-    genre: 'Documentary',
+    genre: Genre.Documentary,
   },
   {
     id: uuidv4(),
@@ -32,7 +32,7 @@ export const predefinedMovies: Movie[] = [
     description: 'Agent 007',
     release: new Date(),
     director: 'Shan Conory',
-    genre: 'Documentary',
+    genre: Genre.Documentary,
   },
   {
     id: uuidv4(),
@@ -40,6 +40,6 @@ export const predefinedMovies: Movie[] = [
     description: 'Old but the Best film ever',
     release: new Date(),
     director: 'Peter Jackson',
-    genre: 'Adventure',
+    genre: Genre.Adventure,
   },
 ];

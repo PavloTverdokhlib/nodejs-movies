@@ -17,13 +17,17 @@ export class MoviesService {
   public getMovies(query: IQuery): Paginated<Movie[]> {
     const page = parseInt(query.page) || 1;
     const limit = parseInt(query.limit) || 1;
+    const filteredItems = this.movies.filter(m =>
+      this.filterBy(m, ['title', 'description'], query.search),
+    );
     return {
       page,
       limit,
-      total: this.movies.length,
-      value: this.movies
-        .slice((page - 1) * limit, (page - 1) * limit + limit)
-        .filter(m => this.filterBy(m, ['title', 'description'], query.search)),
+      total: filteredItems.length,
+      value: filteredItems.slice(
+        (page - 1) * limit,
+        (page - 1) * limit + limit,
+      ),
     };
   }
 

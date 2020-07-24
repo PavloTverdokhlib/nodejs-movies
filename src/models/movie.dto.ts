@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsDateString, Contains } from 'class-validator';
+import { IsNotEmpty, IsDateString, IsEnum } from 'class-validator';
 import { Genre } from './movie.model';
 
 export class MovieDto {
@@ -16,6 +16,6 @@ export class MovieDto {
   director: string;
 
   @IsNotEmpty()
-  @Contains('Action')
+  @IsEnum(Genre)
   genre: Genre;
 }

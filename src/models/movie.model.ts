@@ -1,4 +1,8 @@
-export type Genre = 'Action' | 'Adventure' | 'Documentary';
+export enum Genre {
+  Action = 'Action',
+  Adventure = 'Adventure',
+  Documentary = 'Documentary',
+}
 
 export class Movie {
   public id: string;
