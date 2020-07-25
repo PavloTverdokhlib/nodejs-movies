@@ -1,22 +1,24 @@
+import * as mongoose from 'mongoose';
+
 export enum Genre {
   Action = 'Action',
   Adventure = 'Adventure',
   Documentary = 'Documentary',
 }
 
-export class Movie {
-  public id: string;
-  public title: string;
-  public description: string;
-  public release: Date;
-  public director: string;
-  public genre: Genre;
+export const MovieSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  release: { type: Date, required: true },
+  director: { type: String, required: true },
+  genre: { type: String, required: true },
+});
 
-  constructor(args) {
-    for (const key in args) {
-      if (args.hasOwnProperty(key)) {
-        this[key] = args[key];
-      }
-    }
-  }
+export interface IMovie extends mongoose.Document {
+  id: string;
+  title: string;
+  description: string;
+  release: Date;
+  director: string;
+  genre: Genre;
 }

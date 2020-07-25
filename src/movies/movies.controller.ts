@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
-import { Movie } from '../models/movie.model';
+import { IMovie } from '../models/movie.model';
 import {
   IDeleteRequestResponse,
   IQuery,
@@ -23,27 +23,31 @@ export class MoviesController {
   constructor(public readonly moviesService: MoviesService) {}
 
   @Get()
-  getMovies(@Query() query?: IQuery): Paginated<Movie[]> {
-    return this.moviesService.getMovies(query);
+  async getMovies(@Query() query?: IQuery): Promise<Paginated<IMovie[]>> {
+    const movies = await this.moviesService.getMovies(query);
+    return movies;
   }
 
   @Get(':id')
-  getMovie(@Param('id') id: string): Movie {
-    return this.moviesService.getMovie(id);
+  async getMovie(@Param('id') id: string): Promise<IMovie> {
+    const movie = await this.moviesService.getMovie(id);
+    return movie
   }
 
   @Post()
-  createMovie(@Body() data: MovieDto): Movie {
-    return this.moviesService.createMovie(data);
+  async createMovie(@Body() data: MovieDto): Promise<IMovie> {
+    const newMovie = this.moviesService.createMovie(data);
+    return newMovie;
   }
 
   @Patch(':id')
-  updateMovie(@Param('id') id: string, @Body() data: Movie) {
+  updateMovie(@Param('id') id: string, @Body() data: IMovie) {
     return this.moviesService.updateMovie(id, data);
   }
 
   @Delete(':id')
-  deleteMovie(@Param('id') id: string): IDeleteRequestResponse {
-    return this.moviesService.deleteMovie(id);
+  async deleteMovie(@Param('id') id: string): Promise<IDeleteRequestResponse> {
+    const result = await this.moviesService.deleteMovie(id);
+    return result;
   }
 }
