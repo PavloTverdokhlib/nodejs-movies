@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsDateString, IsEnum } from 'class-validator';
-import { Genre } from './movie.model';
+import { Genre } from '../interfaces/movie.interface';
 
 export class MovieDto {
   @IsNotEmpty()

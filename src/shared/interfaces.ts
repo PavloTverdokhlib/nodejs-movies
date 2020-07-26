@@ -18,3 +18,7 @@ export interface Paginated<T> {
   total: number;
   value: T;
 }
+
+export interface ILoginResponse {
+  access_token: string;
+}

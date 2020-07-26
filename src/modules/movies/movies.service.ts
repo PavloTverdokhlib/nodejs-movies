@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IMovie } from '../models/movie.model';
 import {
   IDeleteRequestResponse,
   IQuery,
   Paginated,
   Status,
-} from '../shared/interfaces';
-import { MovieDto } from '../models/movie.dto';
+} from '../../shared/interfaces';
+import { IMovie } from './interfaces/movie.interface';
+import { MovieDto } from './dto/movie.dto';
 
 @Injectable()
 export class MoviesService {
