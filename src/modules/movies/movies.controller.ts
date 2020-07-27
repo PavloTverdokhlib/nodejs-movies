@@ -1,5 +1,6 @@
 import {
   Controller,
+  Req,
   Get,
   Post,
   Patch,
@@ -40,8 +41,8 @@ export class MoviesController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createMovie(@Body() data: MovieDto): Promise<IMovie> {
-    const newMovie = this.moviesService.createMovie(data);
+  async createMovie(@Body() data: MovieDto, @Req() req: any): Promise<IMovie> {
+    const newMovie = this.moviesService.createMovie(data, req.user);
     return newMovie;
   }
 

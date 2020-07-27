@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -14,14 +14,19 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, pass: string): Promise<IUser> {
-    const user = await this.usersService.findOne(username);
-    const passwordCompare = await bcrypt.compare(pass, user && user.password);
-    if (passwordCompare) {
-      return await user.toObject({
-        transform: toUser,
-      });
+    try {
+      const user = await this.usersService.findOne(username);
+      const passwordCompare = await bcrypt.compare(pass, user && user.password);
+      if (passwordCompare) {
+        return await user.toObject({
+          transform: toUser,
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      throw new BadRequestException('Authorization failed');
     }
-    return null;
   }
 
   async login(user: IUser): Promise<ILoginResponse> {
