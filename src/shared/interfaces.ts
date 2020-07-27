@@ -1,5 +1,8 @@
+import { Genre } from '../modules/movies/interfaces/movie.interface';
+
 export interface IQuery {
   search?: string;
+  genre?: Genre;
   limit?: string;
   page?: string;
 }
@@ -16,6 +19,7 @@ export interface Paginated<T> {
   page: number;
   limit: number;
   total: number;
+  next: string;
   value: T;
 }
 

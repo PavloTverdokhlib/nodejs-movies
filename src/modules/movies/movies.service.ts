@@ -11,9 +11,10 @@ import {
   Paginated,
   Status,
 } from '../../shared/interfaces';
-import { IMovie } from './interfaces/movie.interface';
+import { Genre, IMovie } from './interfaces/movie.interface';
 import { MovieDto } from './dto/movie.dto';
 import { IUser } from '../users/interfaces/user.interface';
+import { toMovie } from '../../shared/transform';
 
 @Injectable()
 export class MoviesService {
@@ -24,33 +25,40 @@ export class MoviesService {
   public async getMovies(query: IQuery): Promise<Paginated<IMovie[]>> {
     const page = parseInt(query.page) || 1;
     const limit = parseInt(query.limit) || 1;
-    const movies = await this.movieModel.find().exec();
-    const filteredItems = movies.filter(m =>
-      this.filterBy(m, ['title', 'description'], query.search),
-    );
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    const filters = this.getFiltersQuery(query);
+    const movies = await this.movieModel
+      .find({
+        $and: filters,
+      })
+      .exec();
+    const isNextEmpty = end >= movies.length;
+    const next = isNextEmpty ? null : `/movies?${this.buildNextPageUrl(query)}`;
     return {
       page,
       limit,
-      total: filteredItems.length,
-      value: filteredItems.slice(
-        (page - 1) * limit,
-        (page - 1) * limit + limit,
-      ),
+      total: movies.length,
+      next,
+      value: movies
+        .slice(start, end)
+        .map(m => m.toObject({ transform: toMovie })),
     };
   }
 
   public async getMovie(id: string): Promise<IMovie> {
     const movie = await this.findMovie(id);
-    return movie;
+    return movie.toObject({ transform: toMovie });
   }
 
-  public createMovie(data: MovieDto, user: IUser): Promise<IMovie> {
+  public async createMovie(data: MovieDto, user: IUser): Promise<IMovie> {
     const newMovie = new this.movieModel({
       ...data,
       createdBy: user.username,
       createdAt: new Date(),
     });
-    return newMovie.save();
+    const savedMovie = await newMovie.save();
+    return savedMovie.toObject({ transform: toMovie });
   }
 
   public async updateMovie(id: string, data: IMovie): Promise<IMovie> {
@@ -63,7 +71,7 @@ export class MoviesService {
       }
     });
     const updatedMovie = await movie.save();
-    return updatedMovie;
+    return updatedMovie.toObject({ transform: toMovie });
   }
 
   public async deleteMovie(id: string): Promise<IDeleteRequestResponse> {
@@ -86,18 +94,35 @@ export class MoviesService {
     }
   }
 
-  private filterBy = (
-    item: IMovie,
-    keys: string[],
-    search: string,
-  ): boolean => {
-    if (!search) {
-      return true;
+  private getFiltersQuery = (query: IQuery): any[] => {
+    const filters: any = [
+      {
+        $or: [
+          { title: { $regex: query.search || '', $options: '$i' } },
+          { description: { $regex: query.search || '', $options: '$i' } },
+        ],
+      },
+    ];
+    if (query.genre) {
+      filters.push({
+        genre: { $eq: query.genre },
+      });
     }
-    return keys.some(
-      key =>
-        item.hasOwnProperty(key) &&
-        item[key].toLowerCase().includes(search.toLowerCase()),
-    );
+    return filters;
+  };
+
+  private buildNextPageUrl = (query: IQuery): string => {
+    const page = parseInt(query.page) || 1;
+    const limit = parseInt(query.limit) || 1;
+    const filters = [];
+    filters.push(`page=${page + 1}`);
+    filters.push(`limit=${limit}`);
+    if (query.search) {
+      filters.push(`search=${query.search}`);
+    }
+    if (query.genre) {
+      filters.push(`genre=${query.genre}`);
+    }
+    return filters.join('&');
   };
 }

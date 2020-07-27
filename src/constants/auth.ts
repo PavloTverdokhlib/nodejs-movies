@@ -2,5 +2,5 @@ export const jwtConstants = {
   /* TODO: Do not expose this key publicly. */
   secret:
     'saC6BpDpFxP-3YJC-PkvygdfcdwLV6xbd75oXG7ZdyTo8Qc9_tt4A_dv3QYLUXuHijlNSK3DSnMnjCgR_kz1RzAku77P9nTV48-mbaxlc71YWTLko4HegaM6sKNO6Wglayl1PdiMGWnhWSCBH0bP0RiPtgUOvlVErdqCqQpYWYrGIqeXyhR3JKUOWQo0qe56WGkBnjaclTi7ih_-O0kJSR9IoJWL_pEu4IkyWGOrc50e2MXSbgwLu3q2_tY3b7JJdImQm_o5UXgu_VSlm9BCY7zajf95FCQ9GfPm8UXfFXheyEShpW1PNE339xg4gnShFPbNBF5PHzwloNJvgwXjUQ',
-  expiration: '360s',
+  expiration: '3000s',
 };

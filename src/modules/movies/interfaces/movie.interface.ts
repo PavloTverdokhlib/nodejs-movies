@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { Exclude } from 'class-transformer';
 
 export enum Genre {
   Action = 'Action',
@@ -7,7 +8,7 @@ export enum Genre {
 }
 
 export const MovieSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   release: { type: Date, required: true },
   director: { type: String, required: true },
