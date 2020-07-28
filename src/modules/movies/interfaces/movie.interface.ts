@@ -1,10 +1,31 @@
 import * as mongoose from 'mongoose';
-import { Exclude } from 'class-transformer';
 
 export enum Genre {
+  AbsurdistSurrealWhimsical = 'Absurdist/surreal/whimsical',
   Action = 'Action',
   Adventure = 'Adventure',
+  Comedy = 'Comedy',
+  Crime = 'Crime',
+  Drama = 'Drama',
   Documentary = 'Documentary',
+  Fantasy = 'Fantasy',
+  Historical = 'Historical',
+  HistoricalFiction = 'HistoricalFiction',
+  Horror = 'Horror',
+  MagicalRealism = 'MagicalRealism',
+  Mystery = 'Mystery',
+  ParanoidFiction = 'ParanoidFiction',
+  Philosophical = 'Philosophical',
+  Political = 'Political',
+  Romance = 'Romance',
+  Saga = 'Saga',
+  Satire = 'Satire',
+  ScienceFiction = 'ScienceFiction',
+  Social = 'Social',
+  Speculative = 'Speculative',
+  Thriller = 'Thriller',
+  Urban = 'Urban',
+  Western = 'Western',
 }
 
 export const MovieSchema = new mongoose.Schema({

@@ -82,6 +82,10 @@ export class MoviesService {
     return { status: Status.DELETED };
   }
 
+  public getGenreList(): string[] {
+    return Object.keys(Genre).map(key => Genre[key]);
+  }
+
   private async findMovie(id: string): Promise<IMovie> {
     try {
       const movie = await this.movieModel.findById(id).exec();

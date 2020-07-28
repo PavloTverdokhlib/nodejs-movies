@@ -33,6 +33,13 @@ export class MoviesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('genre-list')
+  async getGenres(): Promise<string[]> {
+    const genreList = await this.moviesService.getGenreList();
+    return genreList;
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getMovie(@Param('id') id: string): Promise<IMovie> {
     const movie = await this.moviesService.getMovie(id);
