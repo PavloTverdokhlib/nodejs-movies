@@ -13,11 +13,11 @@ import { IEnvironmentVariables } from './env.interface';
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
+      inject: [ConfigService],
       useFactory: async (configService: ConfigService<IEnvironmentVariables>) => ({
         dbName: configService.get<string>('DB_NAME'),
         uri: configService.get<string>('DB_CONNECTION'),
       }),
-      inject: [ConfigService],
     }),
     AuthModule,
     UsersModule,

@@ -1,14 +1,9 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Paginated } from '../../shared/interfaces';
 import { Genre, IMovie } from './interfaces/movie.interface';
-import { MovieDto } from './dto/movie.dto';
+import { MovieDto, UpdateMovieDto } from './dto/movie.dto';
 import { IUser } from '../users/interfaces/user.interface';
 import { toMovie } from '../../shared/transform';
 import { QueryDto } from './dto/query.dto';
@@ -58,10 +53,15 @@ export class MoviesService {
     return savedMovie.toObject({ transform: toMovie });
   }
 
-  public async updateMovie(id: string, data: MovieDto): Promise<IMovie> {
+  public async updateMovie(id: string, data: UpdateMovieDto): Promise<IMovie> {
     const movie = await this.findMovie(id);
-    const updatedMovie = await this.movieModel.updateOne({ id: movie.id }, { ...data }).exec();
-    return updatedMovie.toObject({ transform: toMovie });
+    const result = await this.movieModel
+      .updateOne({ _id: movie.id }, { ...data }, { runValidators: true })
+      .exec();
+    if (result.n === 0) {
+      throw new NotFoundException('Could not find movie.');
+    }
+    return await this.findMovie(id);
   }
 
   public async deleteMovie(id: string): Promise<HttpStatus> {
@@ -119,4 +119,11 @@ export class MoviesService {
     }
     return filters.join('&');
   };
+
+  private checkProp<T>(obj: any, key: string): T {
+    if (obj.hasOwnProperty(key)) {
+      return obj[key];
+    }
+    return undefined;
+  }
 }

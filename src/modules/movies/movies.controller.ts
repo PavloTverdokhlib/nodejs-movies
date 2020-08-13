@@ -16,7 +16,7 @@ import { MoviesService } from './movies.service';
 import { IMovie } from './interfaces/movie.interface';
 import { Paginated } from '../../shared/interfaces';
 import { routes } from '../../constants';
-import { MovieDto } from './dto/movie.dto';
+import { MovieDto, UpdateMovieDto } from './dto/movie.dto';
 import { QueryDto } from './dto/query.dto';
 import { JwtAuthGuard } from '../auth/guards';
 
@@ -46,7 +46,7 @@ export class MoviesController {
   }
 
   @Patch(':id')
-  updateMovie(@Param('id') id: string, @Body() data: IMovie) {
+  updateMovie(@Param('id') id: string, @Body() data: UpdateMovieDto) {
     return this.moviesService.updateMovie(id, data);
   }
 

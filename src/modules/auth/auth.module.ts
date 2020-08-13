@@ -13,13 +13,13 @@ import { IEnvironmentVariables } from '../../env.interface';
     UsersModule,
     PassportModule,
     JwtModule.registerAsync({
+      inject: [ConfigService],
       useFactory: async (
         configService: ConfigService<IEnvironmentVariables>,
       ) => ({
         secret: configService.get<string>('SECRET_KEY'),
         signOptions: { expiresIn: configService.get<string>('TOKEN_EXPIRES') },
       }),
-      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
