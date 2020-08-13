@@ -10,11 +10,10 @@ export class UsersController {
   constructor(public readonly userService: UsersService) {}
 
   @Post('create')
-  async createMovie(@Body() data: UserDto): Promise<IUser> {
+  async createUser(@Body() data: UserDto): Promise<IUser> {
     const newUser = await this.userService.createUser(data);
-    const updated = await newUser.toObject({
+    return await newUser.toObject({
       transform: toUser,
     });
-    return updated;
   }
 }

@@ -1,12 +1,3 @@
-import { Genre } from '../modules/movies/interfaces/movie.interface';
-
-export interface IQuery {
-  search?: string;
-  genre?: Genre;
-  limit?: string;
-  page?: string;
-}
-
 export enum Status {
   DELETED = 'Deleted',
 }

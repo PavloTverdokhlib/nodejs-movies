@@ -1,5 +1,6 @@
 import {
   IsNotEmpty,
+  IsString,
   IsNumber,
   MinLength,
   MaxLength,
@@ -10,14 +11,17 @@ import { Sex } from '../interfaces/user.interface';
 
 export class UserDto {
   @IsNotEmpty()
+  @IsString()
   username: string;
 
   @IsNotEmpty()
+  @IsString()
   @MinLength(6)
   @MaxLength(20)
   password: string;
 
   @IsNotEmpty()
+  @IsString()
   @MinLength(6)
   @MaxLength(20)
   @Match('password', {message: "passwords are not equal"})

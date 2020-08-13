@@ -9,60 +9,50 @@ import {
   Body,
   Query,
   UseGuards,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { IMovie } from './interfaces/movie.interface';
-import {
-  IDeleteRequestResponse,
-  IQuery,
-  Paginated,
-} from '../../shared/interfaces';
+import { Paginated } from '../../shared/interfaces';
 import { routes } from '../../constants';
 import { MovieDto } from './dto/movie.dto';
+import { QueryDto } from './dto/query.dto';
 import { JwtAuthGuard } from '../auth/guards';
 
+@UseGuards(JwtAuthGuard)
 @Controller(routes.movies)
 export class MoviesController {
   constructor(public readonly moviesService: MoviesService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
-  async getMovies(@Query() query?: IQuery): Promise<Paginated<IMovie[]>> {
-    const movies = await this.moviesService.getMovies(query);
-    return movies;
+  async getMovies(@Query() query?: QueryDto): Promise<Paginated<IMovie[]>> {
+    return this.moviesService.getMovies(query);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('genre-list')
   async getGenres(): Promise<string[]> {
-    const genreList = await this.moviesService.getGenreList();
-    return genreList;
+    return this.moviesService.getGenreList();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getMovie(@Param('id') id: string): Promise<IMovie> {
-    const movie = await this.moviesService.getMovie(id);
-    return movie;
+    return this.moviesService.getMovie(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   async createMovie(@Body() data: MovieDto, @Req() req: any): Promise<IMovie> {
-    const newMovie = this.moviesService.createMovie(data, req.user);
-    return newMovie;
+    return this.moviesService.createMovie(data, req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   updateMovie(@Param('id') id: string, @Body() data: IMovie) {
     return this.moviesService.updateMovie(id, data);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteMovie(@Param('id') id: string): Promise<IDeleteRequestResponse> {
-    const result = await this.moviesService.deleteMovie(id);
-    return result;
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteMovie(@Param('id') id: string): Promise<HttpStatus> {
+    return this.moviesService.deleteMovie(id);
   }
 }
